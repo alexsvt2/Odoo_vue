@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import StockInventory from "./views/StockInventory.vue";
+import ProductList from "./views/ProductList.vue";
 
 Vue.use(Router);
 
@@ -23,9 +25,14 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
-      path: "/product_list",
+      path: "/stock_inventory",
+      name: "stockInventory",
+      component: StockInventory
+    },
+    {
+      path: "/product_list/:id",
       name: "product_list",
-      component: () => import("./views/ProductList.vue")
+      component: ProductList
     }
   ]
 });
