@@ -4,8 +4,8 @@
       <v-toolbar-items>
         <v-btn text to="/">Home</v-btn>
         <v-btn text to="/about">About</v-btn>
-        <v-btn text to="/product_list">Product List</v-btn>
         <v-btn text to="/stock_inventory">Stock Inventory</v-btn>
+        <v-btn text to="/product_list">Product List</v-btn>
       </v-toolbar-items>
 
       <v-spacer></v-spacer>

@@ -21,13 +21,14 @@
           <td>{{ product.product_id[1] }}</td>
           <td>{{ currencyFormat(product)}}</td>
           <td>{{product.product_qty}}</td>
-          <td>
+          <td><DialogProduct /></td>
+          <!-- <td>
             <div class="text-center">
               <v-btn text small color="primary" @click="detailDialog(product.id)">
                 <v-icon>open_in_new</v-icon>
               </v-btn>
             </div>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </v-simple-table>
@@ -37,14 +38,22 @@
 
 <script>
 import axios from "axios";
+import DialogProduct from "./../components/DialogProduct";
+
+
+
 var _ = require("lodash");
 export default {
+  components: {
+    DialogProduct
+  },
   data() {
     return {
       search: "",
       products: [],
       errors: [],
-      stockInventoryId: 0
+      stockInventoryId: 0,
+      dialog: false,
     };
   },
   watch: {
