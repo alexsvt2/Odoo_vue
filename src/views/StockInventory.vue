@@ -20,7 +20,7 @@
 </template>
 <script>
 import axios from "axios";
- 
+
 export default {
   data() {
     return {
@@ -44,9 +44,15 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
+      // .then(response => {
+      //   this.products = response.data;
+      // })
+      // .catch(e => {
+      //   this.errors.push(e);
+      // });
     }
   }
 };
 </script>
- 
+
 <style lang="stylus"></style>

@@ -7,7 +7,7 @@
         <v-btn text to="/product_list">Product List</v-btn>
         <v-btn text to="/stock_inventory">Stock Inventory</v-btn>
       </v-toolbar-items>
- 
+
       <v-spacer></v-spacer>
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-light">Vue App</span>
@@ -18,10 +18,10 @@
     </v-content>
   </v-app>
 </template>
- 
+
 <script>
 import HelloWorld from "./components/HelloWorld";
- 
+
 export default {
   name: "App",
   components: {
