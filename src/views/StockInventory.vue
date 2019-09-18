@@ -38,7 +38,6 @@ export default {
       axios
         .get(`http://192.168.100.59:3000/stock-inventory?offset=0&limit=10`)
         .then(response => {
-          console.log("This is the response");
           this.stockInventories = response.data;
         })
         .catch(e => {

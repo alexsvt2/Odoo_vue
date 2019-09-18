@@ -1,10 +1,11 @@
 <template>
   <div style="margin-left: 10px">
-    <!-- Los estilos Son temporales -->
-    <h1>Odoo Product List</h1>
+
+    <!-- <h1>{{ products["0"].inventory_id[1] }}</h1> -->
+    <!-- Investigar para manejar el nombre dinamico -->
 
     <v-alert v-if="errors && errors.length" type="error">
-      <p v-for="error of errors">{{errors}}</p>
+      <p v-for="error of errors" :key="error">{{errors}}</p>
     </v-alert>
 
     <v-simple-table v-if="products && products.length">
@@ -21,14 +22,16 @@
           <td>{{ product.product_id[1] }}</td>
           <td>{{ currencyFormat(product)}}</td>
           <td>{{product.product_qty}}</td>
-          <td><DialogProduct /></td>
-          <!-- <td>
-            <div class="text-center">
-              <v-btn text small color="primary" @click="detailDialog(product.id)">
+          <td>
+            <DialogProduct
+            v-bind:title="product.product_id[1]"
+            v-bind:product_qty="product.product_qty"
+            v-bind:list_price="currencyFormat(product)"
+            />
+            <v-btn text small color="primary" @click="detailDialog(product.id)">
                 <v-icon>open_in_new</v-icon>
               </v-btn>
-            </div>
-          </td> -->
+          </td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -39,8 +42,6 @@
 <script>
 import axios from "axios";
 import DialogProduct from "./../components/DialogProduct";
-
-
 
 var _ = require("lodash");
 export default {
@@ -91,6 +92,7 @@ export default {
         )
         .then(response => {
           this.products = response.data;
+          console.log(this.products);
         })
         .catch(e => {
           this.errors.push(e);
