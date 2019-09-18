@@ -43,12 +43,6 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
-      // .then(response => {
-      //   this.products = response.data;
-      // })
-      // .catch(e => {
-      //   this.errors.push(e);
-      // });
     }
   }
 };

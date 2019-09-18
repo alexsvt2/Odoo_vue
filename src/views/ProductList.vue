@@ -28,7 +28,7 @@
             v-bind:product_qty="product.product_qty"
             v-bind:list_price="currencyFormat(product)"
             />
-            <v-btn text small color="primary" @click="detailDialog(product.id)">
+            <v-btn text small color="primary" @click="goToProductDetail(product.id)">
                 <v-icon>open_in_new</v-icon>
               </v-btn>
           </td>
@@ -70,8 +70,8 @@ export default {
     this.debouncedGetAnswer = this.lodash.debounce(this.getResults, 500);
   },
   methods: {
-    detailDialog(id) {
-      alert(`${id}`);
+    goToProductDetail(id) {
+      this.$router.push({ path: `/product_detail/${id}` });
     },
     getResults: function(term) {
       axios
@@ -90,6 +90,7 @@ export default {
         .get(
           `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
         )
+        
         .then(response => {
           this.products = response.data;
           console.log(this.products);
