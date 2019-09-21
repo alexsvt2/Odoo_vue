@@ -1,11 +1,9 @@
 <template>
   <div style="margin-left: 10px">
-
-    <!-- <h1>{{ products["0"].inventory_id[1] }}</h1> -->
-    <!-- Investigar para manejar el nombre dinamico -->
+    <h1>{{ products["0"].inventory_id[1] }}</h1>
 
     <v-alert v-if="errors && errors.length" type="error">
-      <p v-for="error of errors" :key="error">{{errors}}</p>
+      <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
     <v-simple-table v-if="products && products.length">
@@ -20,17 +18,24 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>{{ product.product_id[1] }}</td>
-          <td>{{ currencyFormat(product)}}</td>
-          <td>{{product.product_qty}}</td>
+          <td>{{ currencyFormat(product) }}</td>
+          <td>{{ product.product_qty }}</td>
           <td>
             <DialogProduct
-            v-bind:title="product.product_id[1]"
-            v-bind:product_qty="product.product_qty"
-            v-bind:list_price="currencyFormat(product)"
+              v-bind:title="product.product_id[1]"
+              v-bind:product_qty="product.product_qty"
+              v-bind:list_price="currencyFormat(product)"
+              v-bind:category="product.products[0].categ_id[1]"
+              v-bind:theoretical_qty="product.theoretical_qty"
             />
-            <v-btn text small color="primary" @click="goToProductDetail(product.id)">
-                <v-icon>open_in_new</v-icon>
-              </v-btn>
+            <v-btn
+              text
+              small
+              color="primary"
+              @click="goToProductDetail(product.id)"
+            >
+              <v-icon>open_in_new</v-icon>
+            </v-btn>
           </td>
         </tr>
       </tbody>
@@ -54,16 +59,14 @@ export default {
       products: [],
       errors: [],
       stockInventoryId: 0,
-      dialog: false,
+      dialog: false
     };
   },
   watch: {
-    search: function() {
-      // this.getResults(this.search); // Nada mas tengo que traer el input dentro de la funcion
-      // this.debouncedGetAnswer;
-    }
+    search: function() {}
   },
-  computed: {},
+  computed: {
+  },
   created() {
     this.stockInventoryId = this.$route.params.id;
     this.productList(this.stockInventoryId);
@@ -75,7 +78,9 @@ export default {
     },
     getResults: function(term) {
       axios
-        .get(`http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`)
+        .get(
+          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`
+        )
         .then(response => {
           this.products = response.data;
         })
@@ -85,8 +90,10 @@ export default {
     },
     productList(stockInventoryId) {
       axios
-        .get(`http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`)
-        
+        .get(
+          `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
+        )
+
         .then(response => {
           this.products = response.data;
           console.log(this.products);

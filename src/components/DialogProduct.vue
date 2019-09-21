@@ -7,15 +7,22 @@
     </template>
 
     <v-card>
-      <v-card-title class="headline grey lighten-2" primary-title>{{ title }}</v-card-title>
+      <v-card-title class="headline grey lighten-2" primary-title>{{
+        title
+      }}</v-card-title>
 
       <v-card-text>
-        <!-- Aqui voy a poner la descripcion detallada del Producto -->
-        Cantidad: {{ product_qty }}
+        Stock Real: {{ product_qty }}
+        <br />
+        Stock Teorico: {{ theoretical_qty }}
+        <br />
         Precio de Lista: {{ list_price }}
+        <br />
+        Categoria: {{ category }}
+        <br />
       </v-card-text>
 
-      <!-- <v-divider></v-divider> -->
+      <v-divider></v-divider>
 
       <v-card-actions>
         <div class="flex-grow-1"></div>
@@ -25,14 +32,9 @@
   </v-dialog>
 </template>
 
-
 <script>
 export default {
-  props: [
-    "title",
-    "product_qty",
-    "list_price"
-    ],
+  props: ['title', 'product_qty', 'theoretical_qty', 'list_price', 'category'],
   data() {
     return {
       dialog: false
