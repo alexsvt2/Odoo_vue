@@ -75,9 +75,7 @@ export default {
     },
     getResults: function(term) {
       axios
-        .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`
-        )
+        .get(`http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`)
         .then(response => {
           this.products = response.data;
         })
@@ -87,9 +85,7 @@ export default {
     },
     productList(stockInventoryId) {
       axios
-        .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
-        )
+        .get(`http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`)
         
         .then(response => {
           this.products = response.data;

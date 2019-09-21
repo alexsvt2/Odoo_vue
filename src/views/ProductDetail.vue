@@ -23,9 +23,7 @@ export default {
     methods: {
         productDetail(productId) {
       axios
-        .get(
-            // `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
-            `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${productId}`
+        .get(`http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${productId}`
         )
         .then(response => {
           this.products = response.data;
