@@ -1,12 +1,24 @@
 <template>
   <div style="margin-left: 10px">
-    <h1>{{ products["0"].inventory_id[1] }}</h1>
+    <h1 v-if="!loading">{{ products["0"].inventory_id[1] }}</h1>
 
     <v-alert v-if="errors && errors.length" type="error">
       <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
-    <v-simple-table v-if="products && products.length">
+    <v-list-item v-ripple v-for="(product, index) in products" :key="index">
+      <v-list-item-avatar>
+        <v-img
+          :src="'data:image/jpeg;base64,' + product.products[0].image"
+        ></v-img>
+      </v-list-item-avatar>
+
+      <v-list-item-content>
+        <v-list-item-title>{{ product.product_id[1] }}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <!-- <v-simple-table v-if="products && products.length">
       <thead>
         <tr>
           <th class="text-left">Producto</th>
@@ -17,7 +29,7 @@
       </thead>
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
-          <td>{{ product.product_id[1] }}</td>
+          <td >{{ product.product_id[1] }}</td>
           <td>{{ currencyFormat(product) }}</td>
           <td>{{ product.product_qty }}</td>
           <td>
@@ -39,7 +51,7 @@
           </td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-simple-table> -->
   </div>
 </template>
 
@@ -59,14 +71,15 @@ export default {
       products: [],
       errors: [],
       stockInventoryId: 0,
-      dialog: false
+      dialog: false,
+      inset: false,
+      loading: false
     };
   },
   watch: {
     search: function() {}
   },
-  computed: {
-  },
+  computed: {},
   created() {
     this.stockInventoryId = this.$route.params.id;
     this.productList(this.stockInventoryId);
@@ -89,14 +102,14 @@ export default {
         });
     },
     productList(stockInventoryId) {
+      this.loading = true;
       axios
         .get(
           `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
         )
-
         .then(response => {
           this.products = response.data;
-          console.log(this.products);
+          this.loading = false;
         })
         .catch(e => {
           this.errors.push(e);
