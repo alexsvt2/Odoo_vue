@@ -6,15 +6,21 @@
       <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
-    <v-list-item v-ripple v-for="(product, index) in products" :key="index">
+    <v-list-item
+      v-ripple
+      v-for="(product, index) in products"
+      :key="index"
+      v-on:click="toggleDialogProductbyId($event, product)"
+    >
       <v-list-item-avatar>
         <v-img
           :src="'data:image/jpeg;base64,' + product.products[0].image"
         ></v-img>
       </v-list-item-avatar>
-
       <v-list-item-content>
         <v-list-item-title>{{ product.product_id[1] }}</v-list-item-title>
+        <v-list-item-subtitle>Precio Lista: {{ currencyFormat(product) }}</v-list-item-subtitle>
+        <v-list-item-subtitle>Stock: {{ product.product_qty }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
@@ -52,6 +58,35 @@
         </tr>
       </tbody>
     </v-simple-table> -->
+
+    <v-row justify="center">
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
+        <!-- <template v-slot:activator="{ on }">
+          <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
+        </template> -->
+        
+        
+        <v-card>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Settings</v-toolbar-title>
+            <div class="flex-grow-1"></div>
+            <v-toolbar-items>
+              <v-btn dark text @click="dialog = false">Save</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+        </v-card>
+
+
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
@@ -86,6 +121,10 @@ export default {
     this.debouncedGetAnswer = this.lodash.debounce(this.getResults, 500);
   },
   methods: {
+    toggleDialogProductbyId(event, item) {
+      console.log(item);
+      this.dialog = !this.dialog;
+    },
     goToProductDetail(id) {
       this.$router.push({ path: `/product_detail/${id}` });
     },
@@ -115,7 +154,6 @@ export default {
           this.errors.push(e);
         });
     },
-    // This methods helps to handle the Currency Format in Price List
     currencyFormat: function(product) {
       return (
         "$" +
