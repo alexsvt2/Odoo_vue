@@ -5,10 +5,15 @@
         <tr v-for="(item, index) in stockInventories" :key="index">
           <td>{{ item.name }}</td>
           <td>{{ item.date }}</td>
-          <td>{{ item.state}}</td>
+          <td>{{ item.state }}</td>
           <td>
             <div class="text-center">
-              <v-btn text small color="primary" @click="goToStockInventoryDetail(item.id)">
+              <v-btn
+                text
+                small
+                color="primary"
+                @click="goToStockInventoryDetail(item)"
+              >
                 <v-icon>open_in_new</v-icon>
               </v-btn>
             </div>
@@ -19,9 +24,12 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-
+import axios from 'axios';
+import searchProducts from './../components/SearchProducts';
 export default {
+  components: {
+    searchProducts
+  },
   data() {
     return {
       stockInventories: []
@@ -31,10 +39,17 @@ export default {
     this.stockInventoryList();
   },
   methods: {
-    goToStockInventoryDetail(id) {
-      this.$router.push({ path: `/product_list/${id}` });
+    goToStockInventoryDetail(item) {
+      console.log(item);
+      // this.$store.dispatch('setStockInventory', { item });
+      this.$store.commit('setStockInventory', { ...item });
+      this.$router.push({ path: `/product_list/${item.id}` });
     },
     stockInventoryList() {
+      console.log(
+        'this.$store.stockInventory',
+        this.$store.getters.stockInventory
+      );
       axios
         .get(`http://192.168.100.59:3000/stock-inventory?offset=0&limit=10`)
         .then(response => {

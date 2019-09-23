@@ -1,11 +1,11 @@
 <template>
   <div style="margin-left: 10px">
-
+    <search-products :productList="products"></search-products>
     <!-- <h1>{{ products["0"].inventory_id[1] }}</h1> -->
     <!-- Investigar para manejar el nombre dinamico -->
 
     <v-alert v-if="errors && errors.length" type="error">
-      <p v-for="error of errors" :key="error">{{errors}}</p>
+      <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
     <v-simple-table v-if="products && products.length">
@@ -20,17 +20,22 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>{{ product.product_id[1] }}</td>
-          <td>{{ currencyFormat(product)}}</td>
-          <td>{{product.product_qty}}</td>
+          <td>{{ currencyFormat(product) }}</td>
+          <td>{{ product.product_qty }}</td>
           <td>
             <DialogProduct
-            v-bind:title="product.product_id[1]"
-            v-bind:product_qty="product.product_qty"
-            v-bind:list_price="currencyFormat(product)"
+              v-bind:title="product.product_id[1]"
+              v-bind:product_qty="product.product_qty"
+              v-bind:list_price="currencyFormat(product)"
             />
-            <v-btn text small color="primary" @click="goToProductDetail(product.id)">
-                <v-icon>open_in_new</v-icon>
-              </v-btn>
+            <v-btn
+              text
+              small
+              color="primary"
+              @click="goToProductDetail(product.id)"
+            >
+              <v-icon>open_in_new</v-icon>
+            </v-btn>
           </td>
         </tr>
       </tbody>
@@ -38,23 +43,24 @@
   </div>
 </template>
 
-
 <script>
-import axios from "axios";
-import DialogProduct from "./../components/DialogProduct";
+import axios from 'axios';
+import DialogProduct from './../components/DialogProduct';
+import searchProducts from './../components/SearchProducts';
 
-var _ = require("lodash");
+var _ = require('lodash');
 export default {
   components: {
+    searchProducts,
     DialogProduct
   },
   data() {
     return {
-      search: "",
+      search: '',
       products: [],
       errors: [],
       stockInventoryId: 0,
-      dialog: false,
+      dialog: false
     };
   },
   watch: {
@@ -75,7 +81,9 @@ export default {
     },
     getResults: function(term) {
       axios
-        .get(`http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`)
+        .get(
+          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`
+        )
         .then(response => {
           this.products = response.data;
         })
@@ -85,8 +93,10 @@ export default {
     },
     productList(stockInventoryId) {
       axios
-        .get(`http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`)
-        
+        .get(
+          `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
+        )
+
         .then(response => {
           this.products = response.data;
           console.log(this.products);
@@ -98,10 +108,10 @@ export default {
     // This methods helps to handle the Currency Format in Price List
     currencyFormat: function(product) {
       return (
-        "$" +
+        '$' +
         product.products[0].list_price
           .toFixed(2)
-          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       );
     }
   }

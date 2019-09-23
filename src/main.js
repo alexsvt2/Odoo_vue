@@ -1,14 +1,14 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import "./registerServiceWorker";
-import vuetify from "./plugins/vuetify";
-import VueLodash from "vue-lodash";
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import './registerServiceWorker';
+import vuetify from './plugins/vuetify';
+import VueLodash from 'vue-lodash';
 
-const options = { name: 'lodash' } // customize the way you want to call it
+const options = { name: 'lodash' }; // customize the way you want to call it
 
-Vue.use(VueLodash, options) // options is optional
+Vue.use(VueLodash, options); // options is optional
 
 Vue.config.productionTip = false;
 
@@ -17,4 +17,4 @@ new Vue({
   store,
   vuetify,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app');

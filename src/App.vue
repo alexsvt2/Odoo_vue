@@ -14,16 +14,16 @@
       </v-toolbar-title>
     </v-app-bar>
     <v-content style="margin-top: 10px">
-      <router-view/>
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import HelloWorld from './components/HelloWorld';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     HelloWorld
   },
