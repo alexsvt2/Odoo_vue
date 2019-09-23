@@ -47,6 +47,19 @@
             <v-btn dark text @click="dialog = false">Save</v-btn>
           </v-toolbar-items>
         </v-toolbar>
+
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Stock: {{ itemForDialog.product_qty}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Cantidad Teorica: {{ itemForDialog.theoretical_qty }}</v-list-item-title>
+              <!-- <v-list-item-subtitle>Set the content filtering level to restrict apps that can be downloaded</v-list-item-subtitle> -->
+            </v-list-item-content>
+          </v-list-item>
       </v-card>
     </v-dialog>
   </div>
@@ -72,7 +85,14 @@ export default {
       dialog: false,
       inset: false,
       loading: false,
-      itemForDialog: {}
+      itemForDialog: {
+        product_id: '',
+        product_qty: '',
+        list_price: '',
+        theoretical_qty: '',
+        __last_update: '',
+        state: ''
+      }
     };
   },
   created() {
@@ -82,9 +102,15 @@ export default {
   },
   methods: {
     toggleDialogProductbyId(event, item) {
-      this.itemForDialog['product_id'] = item.product_id[1];
+      console.log(item);
+      this.itemForDialog.product_id = item.product_id[1];
+      this.itemForDialog.product_qty = item.product_qty;
+      this.itemForDialog.list_price = item.products[0].list_price;
+      this.itemForDialog.theoretical_qty = item.theoretical_qty;
+      this.itemForDialog.__last_update = item.__last_update;
+      this.itemForDialog.state = item.state;
+      console.log(this.itemForDialog);
       this.dialog = !this.dialog;
-
     },
     goToProductDetail(id) {
       this.$router.push({ path: `/product_detail/${id}` });
