@@ -19,74 +19,36 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>{{ product.product_id[1] }}</v-list-item-title>
-        <v-list-item-subtitle>Precio Lista: {{ currencyFormat(product) }}</v-list-item-subtitle>
-        <v-list-item-subtitle>Stock: {{ product.product_qty }}</v-list-item-subtitle>
+        <v-list-item-subtitle
+          >Precio Lista: {{ currencyFormat(product) }}</v-list-item-subtitle
+        >
+        <v-list-item-subtitle
+          >Stock: {{ product.product_qty }}</v-list-item-subtitle
+        >
       </v-list-item-content>
+
+      <v-row justify="center"> </v-row>
     </v-list-item>
 
-    <!-- <v-simple-table v-if="products && products.length">
-      <thead>
-        <tr>
-          <th class="text-left">Producto</th>
-          <th class="text-left">Precio</th>
-          <th class="text-left">Cantidad</th>
-          <th class="text-left"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(product, index) in products" :key="index">
-          <td >{{ product.product_id[1] }}</td>
-          <td>{{ currencyFormat(product) }}</td>
-          <td>{{ product.product_qty }}</td>
-          <td>
-            <DialogProduct
-              v-bind:title="product.product_id[1]"
-              v-bind:product_qty="product.product_qty"
-              v-bind:list_price="currencyFormat(product)"
-              v-bind:category="product.products[0].categ_id[1]"
-              v-bind:theoretical_qty="product.theoretical_qty"
-            />
-            <v-btn
-              text
-              small
-              color="primary"
-              @click="goToProductDetail(product.id)"
-            >
-              <v-icon>open_in_new</v-icon>
-            </v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-simple-table> -->
-
-    <v-row justify="center">
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        hide-overlay
-        transition="dialog-bottom-transition"
-      >
-        <!-- <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
-        </template> -->
-        
-        
-        <v-card>
-          <v-toolbar dark color="primary">
-            <v-btn icon dark @click="dialog = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Settings</v-toolbar-title>
-            <div class="flex-grow-1"></div>
-            <v-toolbar-items>
-              <v-btn dark text @click="dialog = false">Save</v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
-        </v-card>
-
-
-      </v-dialog>
-    </v-row>
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ itemForDialog.product_id }}</v-toolbar-title>
+          <div class="flex-grow-1"></div>
+          <v-toolbar-items>
+            <v-btn dark text @click="dialog = false">Save</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -94,6 +56,7 @@
 <script>
 import axios from "axios";
 import DialogProduct from "./../components/DialogProduct";
+import FullscreenDialogProduct from "./../components/FullscreenDialogProduct";
 
 var _ = require("lodash");
 export default {
@@ -108,13 +71,10 @@ export default {
       stockInventoryId: 0,
       dialog: false,
       inset: false,
-      loading: false
+      loading: false,
+      itemForDialog: {}
     };
   },
-  watch: {
-    search: function() {}
-  },
-  computed: {},
   created() {
     this.stockInventoryId = this.$route.params.id;
     this.productList(this.stockInventoryId);
@@ -122,8 +82,9 @@ export default {
   },
   methods: {
     toggleDialogProductbyId(event, item) {
-      console.log(item);
+      this.itemForDialog['product_id'] = item.product_id[1];
       this.dialog = !this.dialog;
+
     },
     goToProductDetail(id) {
       this.$router.push({ path: `/product_detail/${id}` });

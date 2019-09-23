@@ -1,21 +1,17 @@
 <template>
   <div>
-    <v-simple-table>
-      <tbody>
-        <tr v-for="(item, index) in stockInventories" :key="index">
-          <td>{{ item.name }}</td>
-          <td>{{ item.date }}</td>
-          <td>{{ item.state}}</td>
-          <td>
-            <div class="text-center">
-              <v-btn text small color="primary" @click="goToStockInventoryDetail(item.id)">
-                <v-icon>open_in_new</v-icon>
-              </v-btn>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <v-list-item
+      v-ripple
+      v-for="(item, index) in stockInventories"
+      :key="index"
+      @click="goToStockInventoryDetail(item.id)"
+    >
+      <v-list-item-content>
+        <v-list-item-title>{{ item.name }}</v-list-item-title>
+        <v-list-item-subtitle>{{ item.date }}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{ item.state }}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
   </div>
 </template>
 <script>
