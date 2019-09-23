@@ -8,21 +8,33 @@
     />
     <v-snackbar v-model="snackbar">
       {{ snackbarText }}
-      <v-btn color="pink" text @click="snackbar = false">
-        CERRAR
-      </v-btn>
+      <v-btn color="pink" text @click="snackbar = false">CERRAR</v-btn>
     </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import environment from './../environment';
 export default {
   props: {
     productList: Array
   },
+  async created() {
+    this.stockInventory = this.$store.getters.stockInventory;
+    this.paramId = this.$route.params.id;
+    // this.
+    await axios
+      .get(
+        `${environment.apiURL}/stock-inventory/stock-inventory-by-id?id=${this.paramId}`
+      )
+      .then(res => {
+        this.stockInventory = res.data[0];
+      });
+  },
   data() {
     return {
+      paramId: 0,
       searchBarcodeInput: '',
       snackbar: false,
       snackbarText: '',
@@ -33,17 +45,23 @@ export default {
     async onSearchProductBarcode() {
       await axios
         .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-barcode?barcode=${this.searchBarcodeInput}`
+          `${environment.apiURL}/stock-inventory/stock-details/get-product-by-barcode?barcode=${this.searchBarcodeInput}`
         )
         .then(res => {
           if (res.data.length > 0) {
             if (this.searchBarcodeInput === res.data[0].barcode) {
-              this.productList.map(valueMap => {
-                if (valueMap.products[0].barcode === res.data[0].barcode) {
-                  //   this.updateState();
-                  this.addProduct();
-                }
-              });
+              if (this.productList.length > 0) {
+                this.productList.map(valueMap => {
+                  if (valueMap.products[0].barcode === res.data[0].barcode) {
+                    console.log(valueMap.products[0]);
+                    this.updateProduct(valueMap);
+                  } else {
+                    console.log('no hay');
+                  }
+                });
+              } else {
+                this.addProduct(res.data[0]);
+              }
             }
           } else {
             this.snackbar = true;
@@ -61,31 +79,34 @@ export default {
     async addProduct(productSearched) {
       console.log(productSearched);
       const params = {
-        inventory_id: this.stockInventory.inventory_id,
+        inventory_id: this.stockInventory.id,
         product_qty: 1,
-        // product_id: productSearched[0].id,
-        location_id: this.stockInventory.location_id
+        product_id: productSearched.id,
+        location_id: this.stockInventory.location_id[0]
       };
       console.log(params);
-      //   await axios
-      //     .post(`http://192.168.100.59:3000/stock-inventory/stock-details`, {})
-      //     .then(res => {
-      //       console.log(res);
-      //     });
+      await axios
+        .post(`${environment.apiURL}/stock-inventory/stock-details`, params)
+        .then(res => {
+          console.log('resultado', res);
+        });
     },
 
-    async updateProduct(productSearched) {
+    async updateProduct(stockInventoryLine) {
+      console.log('productList', this.productList);
+      stockInventoryLine.product_qty = stockInventoryLine.product_qty + 1;
       const params = {
-        id: stockInventory.id,
-        inventory_id: stockInventory.inventory_id,
-        product_qty: 1,
-        product_id: productSearched[0].id,
-        location_id: stockInventory.location_id
+        id: stockInventoryLine.id,
+        inventory_id: this.stockInventory.id,
+        product_qty: stockInventoryLine.product_qty + 1,
+        product_id: stockInventoryLine.product_id[0],
+        location_id: this.stockInventory.location_id[0]
       };
+      console.log(params);
       await axios
-        .put('http://192.168.100.59:3000/stock-inventory/stock-details', {})
+        .put(`${environment.apiURL}/stock-inventory/stock-details`, params)
         .then(res => {
-          console.log(res);
+          console.log('resultado update', res);
         });
     }
     // async executeState(productList, searched) {

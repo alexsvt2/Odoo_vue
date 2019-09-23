@@ -8,12 +8,7 @@
           <td>{{ item.state }}</td>
           <td>
             <div class="text-center">
-              <v-btn
-                text
-                small
-                color="primary"
-                @click="goToStockInventoryDetail(item)"
-              >
+              <v-btn text small color="primary" @click="goToStockInventoryDetail(item)">
                 <v-icon>open_in_new</v-icon>
               </v-btn>
             </div>
@@ -26,6 +21,7 @@
 <script>
 import axios from 'axios';
 import searchProducts from './../components/SearchProducts';
+import environment from './../environment';
 export default {
   components: {
     searchProducts
@@ -51,7 +47,7 @@ export default {
         this.$store.getters.stockInventory
       );
       axios
-        .get(`http://192.168.100.59:3000/stock-inventory?offset=0&limit=10`)
+        .get(`${environment.apiURL}/stock-inventory?offset=0&limit=10`)
         .then(response => {
           this.stockInventories = response.data;
         })

@@ -8,7 +8,7 @@
       <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
-    <v-simple-table v-if="products && products.length">
+    <!-- <v-simple-table v-if="products && products.length">
       <thead>
         <tr>
           <th class="text-left">Producto</th>
@@ -28,18 +28,13 @@
               v-bind:product_qty="product.product_qty"
               v-bind:list_price="currencyFormat(product)"
             />
-            <v-btn
-              text
-              small
-              color="primary"
-              @click="goToProductDetail(product.id)"
-            >
+            <v-btn text small color="primary" @click="goToProductDetail(product.id)">
               <v-icon>open_in_new</v-icon>
             </v-btn>
           </td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-simple-table>-->
   </div>
 </template>
 
@@ -47,6 +42,7 @@
 import axios from 'axios';
 import DialogProduct from './../components/DialogProduct';
 import searchProducts from './../components/SearchProducts';
+import environment from './../environment';
 
 var _ = require('lodash');
 export default {
@@ -82,7 +78,7 @@ export default {
     getResults: function(term) {
       axios
         .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`
+          `${environment.apiURL}/stock-inventory/stock-details/get-product-by-filters?value=${term}`
         )
         .then(response => {
           this.products = response.data;
@@ -94,7 +90,7 @@ export default {
     productList(stockInventoryId) {
       axios
         .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
+          `${environment.apiURL}/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
         )
 
         .then(response => {
