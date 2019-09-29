@@ -16,12 +16,23 @@
 <script>
 import axios from 'axios';
 import environment from './../environment';
+const PouchDB = require('pouchdb').default;
+
+var db = new PouchDB('stockInventory');
 export default {
   props: {
     productList: Array
   },
   async created() {
-    this.stockInventory = this.$store.getters.stockInventory;
+    await db
+      .get('stockInventory')
+      .then(doc => {
+        this.stockInventory = doc.stockInventory;
+        console.log(this.stockInventory);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     this.paramId = this.$route.params.id;
     // this.
     await axios
@@ -29,7 +40,8 @@ export default {
         `${environment.apiURL}/stock-inventory/stock-inventory-by-id?id=${this.paramId}`
       )
       .then(res => {
-        this.stockInventory = res.data[0];
+        this.stockInventory = res.data.data[0];
+        console.log(this.stockInventory);
       });
   },
   data() {
@@ -48,19 +60,29 @@ export default {
           `${environment.apiURL}/stock-inventory/stock-details/get-product-by-barcode?barcode=${this.searchBarcodeInput}`
         )
         .then(res => {
-          if (res.data.length > 0) {
-            if (this.searchBarcodeInput === res.data[0].barcode) {
+          const response = res.data.data;
+          console.log(response);
+          if (response.length > 0) {
+            console.log(response[0].barcode);
+            // Verifica que el input sea igual al barcode retornado en posicion
+            if (this.searchBarcodeInput === response[0].barcode) {
+              // si la longitud de los productos de stock.inventory.line es mayor a 0
+              // verificara si no existe en el array de productosList
+              // usando el barcode como referencia
               if (this.productList.length > 0) {
                 this.productList.map(valueMap => {
-                  if (valueMap.products[0].barcode === res.data[0].barcode) {
+                  // si existe, actualizará y sumará uno a la cantidad
+                  if (valueMap.products[0].barcode === response[0].barcode) {
                     console.log(valueMap.products[0]);
                     this.updateProduct(valueMap);
                   } else {
-                    console.log('no hay');
+                    // Sino existe agregará un nuevo valor y en 1. utilizando el resultado de la llamada
+                    // de odoo
+                    this.addProduct(response[0]);
                   }
                 });
               } else {
-                this.addProduct(res.data[0]);
+                this.addProduct(response[0]);
               }
             }
           } else {
@@ -75,7 +97,7 @@ export default {
           console.log(err);
         });
     },
-    // Calle Miza 7213, Colinas de Agua Caliente.
+
     async addProduct(productSearched) {
       console.log(productSearched);
       const params = {

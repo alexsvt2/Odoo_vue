@@ -8,7 +8,7 @@
       <p v-for="error of errors" :key="error">{{ errors }}</p>
     </v-alert>
 
-    <!-- <v-simple-table v-if="products && products.length">
+    <v-simple-table v-if="products && products.length">
       <thead>
         <tr>
           <th class="text-left">Producto</th>
@@ -34,7 +34,7 @@
           </td>
         </tr>
       </tbody>
-    </v-simple-table>-->
+    </v-simple-table>
   </div>
 </template>
 
@@ -81,7 +81,8 @@ export default {
           `${environment.apiURL}/stock-inventory/stock-details/get-product-by-filters?value=${term}`
         )
         .then(response => {
-          this.products = response.data;
+          console.log(response);
+          this.products = response.data.data;
         })
         .catch(e => {
           this.errors.push(e);
@@ -94,7 +95,8 @@ export default {
         )
 
         .then(response => {
-          this.products = response.data;
+          console.log(response);
+          this.products = response.data.data;
           console.log(this.products);
         })
         .catch(e => {

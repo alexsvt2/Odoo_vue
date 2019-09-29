@@ -8,7 +8,12 @@
           <td>{{ item.state }}</td>
           <td>
             <div class="text-center">
-              <v-btn text small color="primary" @click="goToStockInventoryDetail(item)">
+              <v-btn
+                text
+                small
+                color="primary"
+                @click="goToStockInventoryDetail(item)"
+              >
                 <v-icon>open_in_new</v-icon>
               </v-btn>
             </div>
@@ -22,6 +27,9 @@
 import axios from 'axios';
 import searchProducts from './../components/SearchProducts';
 import environment from './../environment';
+const PouchDB = require('pouchdb').default;
+
+var db = new PouchDB('stockInventory');
 export default {
   components: {
     searchProducts
@@ -35,21 +43,46 @@ export default {
     this.stockInventoryList();
   },
   methods: {
-    goToStockInventoryDetail(item) {
+    async goToStockInventoryDetail(item) {
       console.log(item);
       // this.$store.dispatch('setStockInventory', { item });
-      this.$store.commit('setStockInventory', { ...item });
+      // document.this.$store.commit('setStockInventory', { ...item });
+      let error = 0;
+
+      await db
+        .get('stockInventory')
+        .then(doc => {
+          doc.stockInventory = { ...item };
+          db.put(doc)
+            .then(putDoc => {
+              console.log(putDoc);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+          db.put({ _id: 'stockInventory', stockInventory: { ...item } })
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        });
+
       this.$router.push({ path: `/product_list/${item.id}` });
     },
     stockInventoryList() {
-      console.log(
-        'this.$store.stockInventory',
-        this.$store.getters.stockInventory
-      );
+      // console.log(
+      //   'this.$store.stockInventory',
+      //   this.$store.getters.stockInventory
+      // );
       axios
         .get(`${environment.apiURL}/stock-inventory?offset=0&limit=10`)
         .then(response => {
-          this.stockInventories = response.data;
+          this.stockInventories = response.data.data;
         })
         .catch(e => {
           this.errors.push(e);
