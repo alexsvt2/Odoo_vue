@@ -1,6 +1,8 @@
 <template>
   <div style="margin-left: 10px">
-    <h1 v-if="!loading">{{ products["0"].inventory_id[1] }}</h1>
+    <search-products :productList="products"></search-products>
+    <!-- <h1>{{ products["0"].inventory_id[1] }}</h1> -->
+    <!-- Investigar para manejar el nombre dinamico -->
 
     <v-alert v-if="errors && errors.length" type="error">
       <p v-for="error of errors" :key="error">{{ errors }}</p>
@@ -68,20 +70,21 @@
   </div>
 </template>
 
-
 <script>
-import axios from "axios";
-import DialogProduct from "./../components/DialogProduct";
-import FullscreenDialogProduct from "./../components/FullscreenDialogProduct";
+import axios from 'axios';
+import DialogProduct from './../components/DialogProduct';
+import searchProducts from './../components/SearchProducts';
+import environment from './../environment';
 
-var _ = require("lodash");
+var _ = require('lodash');
 export default {
   components: {
+    searchProducts,
     DialogProduct
   },
   data() {
     return {
-      search: "",
+      search: '',
       products: [],
       errors: [],
       stockInventoryId: 0,
@@ -131,10 +134,11 @@ export default {
     getResults: function(term) {
       axios
         .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${term}`
+          `${environment.apiURL}/stock-inventory/stock-details/get-product-by-filters?value=${term}`
         )
         .then(response => {
-          this.products = response.data;
+          console.log(response);
+          this.products = response.data.data;
         })
         .catch(e => {
           this.errors.push(e);
@@ -163,11 +167,13 @@ export default {
       this.loading = true;
       axios
         .get(
-          `http://192.168.100.59:3000/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
+          `${environment.apiURL}/stock-inventory/stock-details?inventory_id=${stockInventoryId}`
         )
+
         .then(response => {
-          this.products = response.data;
-          this.loading = false;
+          console.log(response);
+          this.products = response.data.data;
+          console.log(this.products);
         })
         .catch(e => {
           this.errors.push(e);
@@ -175,10 +181,10 @@ export default {
     },
     currencyFormat: function(product) {
       return (
-        "$" +
+        '$' +
         product.products[0].list_price
           .toFixed(2)
-          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       );
     }
   }
