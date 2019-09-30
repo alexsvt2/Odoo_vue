@@ -4,7 +4,7 @@
       v-ripple
       v-for="(item, index) in stockInventories"
       :key="index"
-      @click="goToStockInventoryDetail(item.id)"
+      @click="goToStockInventoryDetail(item)"
     >
       <v-list-item-content>
         <v-list-item-title>{{ item.name }}</v-list-item-title>
