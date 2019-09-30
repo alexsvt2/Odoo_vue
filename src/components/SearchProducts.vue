@@ -1,10 +1,13 @@
 <template>
   <div>
     <input
+      id="barcode-search"
       style="background: grey;"
       v-model="searchBarcodeInput"
       type="text"
       @keypress.enter="onSearchProductBarcode"
+      :disabled="inputState"
+      autofocus
     />
     <v-snackbar v-model="snackbar">
       {{ snackbarText }}
@@ -50,11 +53,13 @@ export default {
       searchBarcodeInput: '',
       snackbar: false,
       snackbarText: '',
-      stockInventory: Array
+      stockInventory: Array,
+      inputState: false
     };
   },
   methods: {
     async onSearchProductBarcode() {
+      this.inputState = true;
       await axios
         .get(
           `${environment.apiURL}/stock-inventory/stock-details/get-product-by-barcode?barcode=${this.searchBarcodeInput}`
@@ -63,24 +68,27 @@ export default {
           const response = res.data.data;
           console.log(response);
           if (response.length > 0) {
-            console.log(response[0].barcode);
             // Verifica que el input sea igual al barcode retornado en posicion
             if (this.searchBarcodeInput === response[0].barcode) {
               // si la longitud de los productos de stock.inventory.line es mayor a 0
               // verificara si no existe en el array de productosList
               // usando el barcode como referencia
               if (this.productList.length > 0) {
-                this.productList.map(valueMap => {
+                let mapIndex = -1;
+                this.productList.map((valueMap, index) => {
                   // si existe, actualizará y sumará uno a la cantidad
+
                   if (valueMap.products[0].barcode === response[0].barcode) {
-                    console.log(valueMap.products[0]);
-                    this.updateProduct(valueMap);
-                  } else {
-                    // Sino existe agregará un nuevo valor y en 1. utilizando el resultado de la llamada
-                    // de odoo
-                    this.addProduct(response[0]);
+                    mapIndex = index;
                   }
                 });
+                console.log(mapIndex);
+                if (mapIndex !== -1) {
+                  console.log(this.productList[mapIndex]);
+                  this.updateProduct(this.productList[mapIndex]);
+                } else {
+                  this.addProduct(response[0]);
+                }
               } else {
                 this.addProduct(response[0]);
               }
@@ -88,6 +96,7 @@ export default {
           } else {
             this.snackbar = true;
             this.snackbarText = 'No se encontró el producto';
+            this.inputState = true;
             setTimeout(() => {
               this.snackbar = false;
             }, 5000);
@@ -110,13 +119,20 @@ export default {
       await axios
         .post(`${environment.apiURL}/stock-inventory/stock-details`, params)
         .then(res => {
-          console.log('resultado', res);
+          this.inputState = false;
+          setTimeout(() => {
+            document.getElementById('barcode-search').focus();
+            this.searchBarcodeInput = '';
+          }, 100);
+          if (res.data.error !== '') {
+            console.log(JSON.stringify(res.data.error));
+          } else {
+            this.$emit('triggerProductsList');
+          }
         });
     },
 
     async updateProduct(stockInventoryLine) {
-      console.log('productList', this.productList);
-      stockInventoryLine.product_qty = stockInventoryLine.product_qty + 1;
       const params = {
         id: stockInventoryLine.id,
         inventory_id: this.stockInventory.id,
@@ -124,11 +140,20 @@ export default {
         product_id: stockInventoryLine.product_id[0],
         location_id: this.stockInventory.location_id[0]
       };
-      console.log(params);
+
       await axios
         .put(`${environment.apiURL}/stock-inventory/stock-details`, params)
         .then(res => {
-          console.log('resultado update', res);
+          setTimeout(() => {
+            document.getElementById('barcode-search').focus();
+            this.searchBarcodeInput = '';
+          }, 100);
+          this.inputState = false;
+          if (res.data.error !== '') {
+            console.log(JSON.stringify(res.data.error));
+          } else {
+            this.$emit('triggerProductsList');
+          }
         });
     }
     // async executeState(productList, searched) {

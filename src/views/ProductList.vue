@@ -1,6 +1,9 @@
 <template>
   <div style="margin-left: 10px">
-    <search-products :productList="products"></search-products>
+    <search-products
+      :productList="products"
+      @triggerProductsList="productList(stockInventoryId)"
+    ></search-products>
     <!-- <h1>{{ products["0"].inventory_id[1] }}</h1> -->
     <!-- Investigar para manejar el nombre dinamico -->
 
@@ -67,6 +70,12 @@
         </v-form>
       </v-card>
     </v-dialog>
+    <div
+      style="position: fixed; bottom: 0px;  left: 0px; right: 0px; width: 100%; height: 120px; display: flex; flex-direction: column;"
+    >
+      <button style="height: 60px"><v-icon>mdi-watch</v-icon>Añadir</button>
+      <button style="height: 60px">Validar</button>
+    </div>
   </div>
 </template>
 
@@ -92,13 +101,13 @@ export default {
       inset: false,
       loading: false,
       itemForDialog: {
-        product_id: "",
-        product_description: "",
-        product_qty: "",
-        list_price: "",
-        theoretical_qty: "",
-        __last_update: "",
-        state: ""
+        product_id: '',
+        product_description: '',
+        product_qty: '',
+        list_price: '',
+        theoretical_qty: '',
+        __last_update: '',
+        state: ''
       },
       dataPost: {
         id: 0,
@@ -153,7 +162,7 @@ export default {
       this.dataPost.location_id = productLine.location_id;
       axios
         .put(
-          "http://192.168.100.59:3000/stock-inventory/stock-details",
+          'http://192.168.100.59:3000/stock-inventory/stock-details',
           this.dataPost
         )
         .then(response => {
