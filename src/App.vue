@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app>
+    <v-app-bar app>
       <v-toolbar-items>
         <v-btn text to="/">Home</v-btn>
         <v-btn text to="/about">About</v-btn>
@@ -12,7 +12,7 @@
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-light">Vue App</span>
       </v-toolbar-title>
-    </v-app-bar>-->
+    </v-app-bar>
     <v-content style="margin-top: 10px">
       <router-view />
     </v-content>

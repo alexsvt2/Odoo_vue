@@ -26,7 +26,7 @@ export default {
         .get(`http://192.168.100.59:3000/stock-inventory/stock-details/get-product-by-filters?value=${productId}`
         )
         .then(response => {
-          this.products = response.data;
+          this.products = response.data.data;
           console.log(this.products);
         })
         .catch(e => {

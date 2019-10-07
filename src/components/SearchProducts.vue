@@ -31,20 +31,18 @@ export default {
       .get('stockInventory')
       .then(doc => {
         this.stockInventory = doc.stockInventory;
-        console.log(this.stockInventory);
+        // console.log(this.stockInventory);
       })
       .catch(err => {
         console.log(err);
       });
     this.paramId = this.$route.params.id;
-    // this.
     await axios
       .get(
         `${environment.apiURL}/stock-inventory/stock-inventory-by-id?id=${this.paramId}`
       )
       .then(res => {
         this.stockInventory = res.data.data[0];
-        console.log(this.stockInventory);
       });
   },
   data() {
@@ -66,7 +64,7 @@ export default {
         )
         .then(res => {
           const response = res.data.data;
-          console.log(response);
+          // console.log(response);
           if (response.length > 0) {
             // Verifica que el input sea igual al barcode retornado en posicion
             if (this.searchBarcodeInput === response[0].barcode) {
@@ -77,7 +75,6 @@ export default {
                 let mapIndex = -1;
                 this.productList.map((valueMap, index) => {
                   // si existe, actualizará y sumará uno a la cantidad
-
                   if (valueMap.products[0].barcode === response[0].barcode) {
                     mapIndex = index;
                   }
@@ -86,6 +83,7 @@ export default {
                 if (mapIndex !== -1) {
                   console.log(this.productList[mapIndex]);
                   this.updateProduct(this.productList[mapIndex]);
+                  // Aqui esta lo que necesito, pero que no entiendo
                 } else {
                   this.addProduct(response[0]);
                 }
@@ -132,11 +130,11 @@ export default {
         });
     },
 
-    async updateProduct(stockInventoryLine) {
+    async updateProduct(stockInventoryLine, qty=1) {
       const params = {
         id: stockInventoryLine.id,
         inventory_id: this.stockInventory.id,
-        product_qty: stockInventoryLine.product_qty + 1,
+        product_qty: stockInventoryLine.product_qty + qty,
         product_id: stockInventoryLine.product_id[0],
         location_id: this.stockInventory.location_id[0]
       };

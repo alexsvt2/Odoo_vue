@@ -66,13 +66,10 @@ export default {
       this.$router.push({ path: `/product_list/${item.id}` });
     },
     stockInventoryList() {
-      // console.log(
-      //   'this.$store.stockInventory',
-      //   this.$store.getters.stockInventory
-      // );
       axios
         .get(`${environment.apiURL}/stock-inventory?offset=0&limit=10`)
         .then(response => {
+          console.log(response.data.data);
           this.stockInventories = response.data.data;
         })
         .catch(e => {

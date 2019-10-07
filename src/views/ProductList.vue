@@ -100,22 +100,7 @@ export default {
       dialog: false,
       inset: false,
       loading: false,
-      itemForDialog: {
-        product_id: '',
-        product_description: '',
-        product_qty: '',
-        list_price: '',
-        theoretical_qty: '',
-        __last_update: '',
-        state: ''
-      },
-      dataPost: {
-        id: 0,
-        inventory_id: 0,
-        product_qty: 0,
-        product_id: 0,
-        location_id: 0
-      }
+      itemForDialog: {}
     };
   },
   created() {
@@ -125,16 +110,18 @@ export default {
   },
   methods: {
     toggleDialogProductbyId(event, item) {
-      this.itemForDialog.product_id = item.product_id[0];
-      this.itemForDialog.product_description = item.product_id[1];
-      this.itemForDialog.product_qty = item.product_qty;
-      this.itemForDialog.id = item.id;
-      this.itemForDialog.inventory_id = item.inventory_id[0];
-      this.itemForDialog.location_id = item.location_id[0];
-      this.itemForDialog.list_price = item.products[0].list_price;
-      this.itemForDialog.theoretical_qty = item.theoretical_qty;
-      this.itemForDialog.__last_update = item.__last_update;
-      this.itemForDialog.state = item.state;
+      this.itemForDialog = {
+        id: item.id,
+        product_qty: item.product_qty,
+        product_id: item.product_id[0],
+        product_description: item.product_id[1],
+        state: item.state,
+        inventory_id: item.inventory_id[0],
+        location_id: item.location_id[0],
+        list_price: item.products[0].list_price,
+        theoretical_qty: item.theoretical_qty,
+        __last_update: item.__last_update
+      };
       this.dialog = !this.dialog;
     },
     goToProductDetail(id) {
@@ -146,31 +133,33 @@ export default {
           `${environment.apiURL}/stock-inventory/stock-details/get-product-by-filters?value=${term}`
         )
         .then(response => {
-          console.log(response);
           this.products = response.data.data;
         })
         .catch(e => {
           this.errors.push(e);
         });
     },
-    updateProduct: function(productLine) {
-      console.log(productLine);
-      this.dataPost.id = productLine.id;
-      this.dataPost.product_id = productLine.product_id;
-      this.dataPost.product_qty = Number(productLine.product_qty);
-      this.dataPost.inventory_id = productLine.inventory_id;
-      this.dataPost.location_id = productLine.location_id;
-      axios
-        .put(
-          'http://192.168.100.59:3000/stock-inventory/stock-details',
-          this.dataPost
-        )
-        .then(response => {
-          console.log(response.statusText);
+    async updateProduct(productLine) {
+      const params = {
+        id: productLine.id,
+        product_id: productLine.product_id,
+        product_qty: Number(productLine.product_qty),
+        inventory_id: productLine.inventory_id,
+        location_id: productLine.location_id
+      };
+
+      await axios
+        .put(`${environment.apiURL}/stock-inventory/stock-details`, params)
+        .then(res => {
+          console.log(res.statusText);
+          this.dialog = !this.dialog;
+
+          if (res.data.error !== '') {
+            console.log(JSON.stringify(res.data.error));
+          } else {
+            this.productList(this.stockInventoryId)
+          }
         })
-        .catch(e => {
-          console.log(e.message);
-        });
     },
     productList(stockInventoryId) {
       this.loading = true;
@@ -180,12 +169,10 @@ export default {
         )
 
         .then(response => {
-          console.log(response);
           this.products = response.data.data;
-          console.log(this.products);
         })
-        .catch(e => {
-          this.errors.push(e);
+        .catch(err => {
+          this.err.push(err);
         });
     },
     currencyFormat: function(product) {
