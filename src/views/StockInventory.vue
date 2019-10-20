@@ -63,7 +63,7 @@ export default {
             });
         });
 
-      this.$router.push({ path: `/product_list/${item.id}` });
+      this.$router.push({ path: `/stock_inventory/product_list/${item.id}` });
     },
     stockInventoryList() {
       axios

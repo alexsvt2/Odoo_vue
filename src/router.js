@@ -31,14 +31,14 @@ export default new Router({
       component: StockInventory
     },
     {
-      path: '/product_list/:id',
+      path: '/stock_inventory/product_list/:id',
       name: 'product_list',
       component: ProductList
     },
-    {
-      path: '/product_detail/:id',
-      name: 'product_detail',
-      component: ProductDetail
-    }
+    // {
+    //   path: '/product_detail/:id',
+    //   name: 'product_detail',
+    //   component: ProductDetail
+    // }
   ]
 });

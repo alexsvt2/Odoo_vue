@@ -1,18 +1,37 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-items>
-        <v-btn text to="/">Home</v-btn>
-        <v-btn text to="/about">About</v-btn>
-        <v-btn text to="/stock_inventory">Stock Inventory</v-btn>
-        <v-btn text to="/product_list">Product List</v-btn>
-      </v-toolbar-items>
+    <v-navigation-drawer
+      v-model="drawer"
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      app
+    >
+      <list dense>
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.link">
+          <v-list-item-icon>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-icon>
 
-      <v-spacer></v-spacer>
-      <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">Vue App</span>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ item.text }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      app
+      color="blue darken-3"
+      dark
+    >
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <span class="hidden-sm-and-down">Odoo Inventary/VueApp</span>
       </v-toolbar-title>
     </v-app-bar>
+
     <v-content style="margin-top: 10px">
       <router-view />
     </v-content>
@@ -27,6 +46,15 @@ export default {
   components: {
     HelloWorld
   },
-  data: () => ({})
+  data: () => ({
+    drawer: null,
+    items: [
+    // Estas rutas deben cambiarse para hacerlas dinamicas(Pendiente de Entender como Mejorarla)
+      { icon: 'home', text: 'Inicio', link: '/' },
+      { icon: 'list', text: 'Stock Inventory', link: '/stock_inventory' },
+      { icon: 'info', text: 'About', link: '/about' },
+      // { icon: 'contacts', text: 'Product List', link: '/product_list' }
+    ]
+  })
 };
 </script>
