@@ -6,14 +6,14 @@
       app
     >
       <list dense>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.link">
+        <v-list-item v-for="(url, i) in urls" :key="i" :to="url.link">
           <v-list-item-icon>
-            <v-icon>{{item.icon}}</v-icon>
+            <v-icon>{{url.icon}}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
             <v-list-item-title>
-              {{ item.text }}
+              {{ url.text }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -76,13 +76,43 @@ export default {
   },
   data: () => ({
     drawer: null,
-    items: [
-    // Estas rutas deben cambiarse para hacerlas dinamicas(Pendiente de Entender como Mejorarla)
+    dialog: false,
+    urls: [
       { icon: 'home', text: 'Inicio', link: '/' },
       { icon: 'list', text: 'Stock Inventory', link: '/stock_inventory' },
       { icon: 'info', text: 'About', link: '/about' },
       // { icon: 'contacts', text: 'Product List', link: '/product_list' }
-    ]
+    ],
+    // Estos Items son para el menu de usuario
+    items: [
+        {
+          icon: 'account_circle',
+          href: '#',
+          title: 'Profile',
+          click: (e) => {
+          }
+        },
+        {
+          icon: 'settings',
+          href: '#',
+          title: 'Settings',
+          click: () => {
+            const vm = this;
+
+            vm.dialogSettings = true;
+          }
+        },
+        {
+          icon: 'exit_to_app',
+          href: '#',
+          title: 'Log Out',
+          click: () => {
+            const vm = this;
+
+            vm.$router.push({ name: 'Login' });
+          }
+        }
+      ]
   })
 };
 </script>
