@@ -19,17 +19,16 @@
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <span class="hidden-sm-and-down">Odoo Inventary/VueApp</span>
       </v-toolbar-title>
-
-      <!-- Iconos y Espacio en Nav -->
       <v-spacer></v-spacer>
-      <v-btn icon>
+
+
+      <!-- <v-btn icon>
         <v-icon>apps</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>notifications</v-icon>
-      </v-btn>
-
-      <!-- Boton Avatar -->
+      </v-btn> -->
+      
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon large v-on="on">
