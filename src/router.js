@@ -35,16 +35,6 @@ export default new Router({
       path: '/stock_inventory/product_list/:id',
       name: 'product_list',
       component: ProductList
-    },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: Login
-    // }
-    // {
-    //   path: '/product_detail/:id',
-    //   name: 'product_detail',
-    //   component: ProductDetail
-    // }
+    }
   ]
 });

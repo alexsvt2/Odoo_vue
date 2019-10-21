@@ -1,5 +1,6 @@
 <template>
   <HelloWorld />
+  <!-- Este View se Apoya de un Component -->
 </template>
 
 <script>

@@ -130,7 +130,7 @@ export default {
         });
     },
 
-    async updateProduct(stockInventoryLine, qty=1) {
+    async updateProduct(stockInventoryLine, qty = 1) {
       const params = {
         id: stockInventoryLine.id,
         inventory_id: this.stockInventory.id,
