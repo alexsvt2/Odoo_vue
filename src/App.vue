@@ -31,7 +31,6 @@
         <span class="hidden-sm-and-down">Odoo Inventary/VueApp</span>
       </v-toolbar-title>
 
-
 <!-- Iconos y Espacio en Nav -->
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -40,9 +39,14 @@
       <v-btn icon>
         <v-icon>notifications</v-icon>
       </v-btn>
-      <v-btn
+
+      <!-- Boton Avatar -->
+      <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn
         icon
         large
+        v-on="on"
       >
         <v-avatar
           size="32px"
@@ -54,10 +58,22 @@
           >
           </v-img></v-avatar>
       </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in itemsUser"
+          :key="index"
+          @click=""
+        >
 
-      <!-- Iconos y Espacio en Nav -->
+        <v-list-item-icon>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-icon>
 
-
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     </v-app-bar>
 
     <v-content style="margin-top: 10px">
@@ -83,35 +99,9 @@ export default {
       { icon: 'info', text: 'About', link: '/about' },
       // { icon: 'contacts', text: 'Product List', link: '/product_list' }
     ],
-    // Estos Items son para el menu de usuario
-    items: [
-        {
-          icon: 'account_circle',
-          href: '#',
-          title: 'Profile',
-          click: (e) => {
-          }
-        },
-        {
-          icon: 'settings',
-          href: '#',
-          title: 'Settings',
-          click: () => {
-            const vm = this;
-
-            vm.dialogSettings = true;
-          }
-        },
-        {
-          icon: 'exit_to_app',
-          href: '#',
-          title: 'Log Out',
-          click: () => {
-            const vm = this;
-
-            vm.$router.push({ name: 'Login' });
-          }
-        }
+    itemsUser: [
+        { icon: 'home', title: 'Settings' },
+        { icon: 'contacts', title: 'Logout' }
       ]
   })
 };

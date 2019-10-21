@@ -3,7 +3,8 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import StockInventory from './views/StockInventory.vue';
 import ProductList from './views/ProductList.vue';
-import ProductDetail from './views/ProductDetail';
+import ProductDetail from './views/ProductDetail.vue';
+import Login from './views/Login.vue';
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       name: 'product_list',
       component: ProductList
     },
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: Login
+    // }
     // {
     //   path: '/product_detail/:id',
     //   name: 'product_detail',

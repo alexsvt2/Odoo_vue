@@ -1,7 +1,8 @@
 <template>
 	<v-container>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>Login</h1>
+    <p>This is the Login Page</p>
   </div>
-	 </v-container>
+</v-container>
 </template>
