@@ -4,7 +4,6 @@ import Home from './views/Home.vue';
 import StockInventory from './views/StockInventory.vue';
 import ProductList from './views/ProductList.vue';
 import ProductDetail from './views/ProductDetail.vue';
-import Login from './views/Login.vue';
 
 import AboutView from './views/About.vue';
 

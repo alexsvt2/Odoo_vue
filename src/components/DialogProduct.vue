@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on }">
       <v-btn text small color="primary" v-on="on">
@@ -43,4 +43,4 @@ export default {
     };
   }
 };
-</script>
+</script> -->

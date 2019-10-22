@@ -1,14 +1,14 @@
 <template>
-  <HelloWorld />
+  <Home />
   <!-- Este View se Apoya de un Component -->
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
+import Home from '../components/HelloWorld';
 
 export default {
   components: {
-    HelloWorld
+    Home
   }
 };
 </script>

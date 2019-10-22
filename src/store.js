@@ -9,8 +9,6 @@ export default new Vuex.Store({
   },
   mutations: {
     setStockInventory(state, payload) {
-      console.log(payload);
-      console.log(state);
       state.stockInventory = payload;
     }
   },

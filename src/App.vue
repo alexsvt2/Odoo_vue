@@ -17,12 +17,12 @@
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <span class="hidden-sm-and-down">Odoo Inventary/VueApp</span>
+        <span class="hidden-sm-and-down">Odoo Inventario</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-
-      <!-- <v-btn icon>
+      <!-- Estos Iconos no los necesito en este momento, pero no los quiero eliminar
+       <v-btn icon>
         <v-icon>apps</v-icon>
       </v-btn>
       <v-btn icon>
@@ -48,7 +48,6 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-
     <v-content style="margin-top: 10px">
       <router-view />
     </v-content>
@@ -56,13 +55,9 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data: () => ({
     drawer: null,
     dialog: false,
@@ -70,7 +65,6 @@ export default {
       { icon: 'home', text: 'Inicio', link: '/' },
       { icon: 'list', text: 'Stock Inventory', link: '/stock_inventory' },
       { icon: 'info', text: 'About', link: '/about' }
-      // { icon: 'contacts', text: 'Product List', link: '/product_list' }
     ],
     itemsUser: [
       { icon: 'home', title: 'Settings' },
