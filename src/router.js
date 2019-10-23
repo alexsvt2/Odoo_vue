@@ -24,29 +24,21 @@ const router = new VueRouter({
     {
       path: '/home',
       name: 'home',
-      component: Home,
-      beforeEnter: (to, from, next) => {
-        console.log(to)
-        next('/');
-      }
+      component: Home
+      // beforeEnter: (to, from, next) => {
+      //   console.log(to)
+      //   next('/');
+      // }
     },
     {
       path: '/about',
       name: 'about',
-      component: AboutView,
-      beforeEnter: (to, from, next) => {
-        console.log(to)
-        next('/');
-      }
+      component: AboutView
     },
     {
       path: '/stock_inventory',
       name: 'stockInventory',
-      component: StockInventory,
-      beforeEnter: (to, from, next) => {
-        console.log(to)
-        next('/');
-      }
+      component: StockInventory
     },
     {
       path: '/stock_inventory/product_list/:id',
@@ -56,13 +48,25 @@ const router = new VueRouter({
   ]
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (true) {
-//     console.log(router.currentRoute.path);
-//   	next('/login')
-//   } else {
-//   	next('/home')
-//   }
-// });
+/* Tengo que enviar un array de rutas protegidas o hardcodeado
+E igual si intento entrar desde otra ruta, no obedece y entra
+to.fullPath('/home')
+next('/')
+Literalmente con from, tendria que manejar desde donde viene el usuario
+*/
+
+router.beforeEach((to, from, next) => {
+  // Definir la ruta procedente
+  if (false) {
+    if (
+      to.name === 'home' ||
+      to.name === 'about' ||
+      to.name === 'stockInventory'
+    ) {
+      next('/');
+    }
+  }
+  next();
+});
 
 export default router;
