@@ -57,15 +57,14 @@ Literalmente con from, tendria que manejar desde donde viene el usuario
 
 router.beforeEach((to, from, next) => {
   // Definir la ruta procedente
-  if (false) {
-    if (
-      to.name === 'home' ||
-      to.name === 'about' ||
-      to.name === 'stockInventory'
-    ) {
-      next('/');
-    }
+  if (
+    to.name === 'home' ||
+    to.name === 'about' ||
+    to.name === 'stockInventory'
+  ) {
+    next('/');
   }
+
   next();
 });
 
