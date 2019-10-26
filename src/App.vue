@@ -6,7 +6,7 @@
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
     >
-      <list dense>
+      <v-list dense>
         <v-list-item v-for="(url, i) in urls" :key="i" :to="url.link">
           <v-list-item-icon>
             <v-icon>{{url.icon}}</v-icon>
@@ -15,7 +15,7 @@
             <v-list-item-title>{{ url.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </list>
+      </v-list>
     </v-navigation-drawer>
     <v-app-bar
     v-if="checkCurrentRoute()"
